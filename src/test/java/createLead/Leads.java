@@ -11,11 +11,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 @Test
 public class Leads {
 	WebDriver driver;
-	@BeforeTest
+	@BeforeTest 
+
+
 	public void OpenURL() {
+		WebDriverManager.chromedriver().setup();
+
+
 		driver=new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("https://dev.crm.digitaledify.ai/");
@@ -25,7 +32,6 @@ public class Leads {
 			return new Object[][] {
 				{"Kiran","kiran@gmail.com","8019684875"},
 				{"madhuri","madhuri@gmail.com","8019684875"},
-				{"maheshwaran","maheshwaran@gmail.com","9908088535"}
 			};
 		}
 		@Test(priority=1)
@@ -34,7 +40,7 @@ public class Leads {
 			driver.findElement(By.name("password")).sendKeys("123456");
 			driver.findElement(By.xpath("//button[text()='Login']")).click();
 		}
-		@Test(priority=2,dataProvider="leadData")
+		@Test(priority=2,dataProvider="leadData",dependsOnMethods="login")
 		public void createLead(String name,String email,String phone) {
 			WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(20));
 			WebElement lead = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Leads']")));
@@ -46,5 +52,7 @@ public class Leads {
 			driver.findElement(By.name("phone")).sendKeys(phone);
 			driver.findElement(By.name("email")).sendKeys(email);
 			driver.findElement(By.xpath("//button[text()='Create']")).click();
+			driver.close();
 		}
+	
 	}

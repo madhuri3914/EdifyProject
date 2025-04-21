@@ -6,6 +6,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 public class Creds {
 //TestCase
 	//open URL
@@ -14,6 +16,9 @@ public class Creds {
 	WebDriver driver;
 	@BeforeClass
 	public void setup() {
+		WebDriverManager.chromedriver().setup();
+
+
 		driver = new ChromeDriver();
 	}
 	@Test(priority=0)
@@ -27,8 +32,9 @@ public class Creds {
 		driver.findElement(By.name("password")).sendKeys("123456");
 	}
 	@Test(priority=2)
-	public void submiy() {
+	public void submit() {
 		driver.findElement(By.xpath("//button[text()='Login']")).click();
+		driver.close();
 	}
 }
 
